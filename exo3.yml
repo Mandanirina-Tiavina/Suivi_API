@@ -15,4 +15,90 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Task'
+                  $ref: '#/components/schemas/Tasks'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tasks'
+      responses:
+        201:
+          description: Task created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tasks'
+    delete:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  taskIdentifier:
+                    type: integer
+      responses:
+        200:
+          description: Task deleted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tasks'
+  /task/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Task found by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        404:
+          description: Task not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Task not found
+    delete:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Task deleted by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+components:
+  schemas:
+    Tasks:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Faire les courses
+        completed:
+          type: boolean
