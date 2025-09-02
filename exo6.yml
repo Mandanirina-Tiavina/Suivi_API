@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  title: exo6 openapi
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8000'
+paths:
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Specific user informationS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+  /users:
+    post:
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateUserProfile'
+      responses:
+        200:
+          description: Users created with informations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+  /users/{id}/personalInfo:
+    put:
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/UserIdentifierPathParameter'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalInfo'
+      responses:
+        200:
+          description: Updated user infos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+  /users/{id}/address:
+    put:
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/UserIdentifierPathParameter'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        200:
+          description: Updated user address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+  /users/{id}/preferences:
+    put:
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/UserIdentifierPathParameter'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Preference'
+      responses:
+        200:
+          description: Updated user preference
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+components:
+  parameters:
+    UserIdentifierPathParameter:
+      in: path
+      name: id
+      description: User identifier
+      schema:
+        type: string
+      required: true
+  schemas:
+    PersonalInfo:
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        birthday:
+          type: string
+          format: date
+        email:
+          type: string
+          format: email
+    Address:
+      properties:
+        address_street:
+          type: string
+        address_city:
+          type: string
+        address_country:
+          type: string
+        address_postal_code:
+          type: string
+    Preference:
+      properties:
+        needs_newsletter:
+          type: boolean
+        language:
+          type: string
+          enum:
+            - mg
+            - fr
+            - eng
+    CreateUserProfile:
+      allOf:
+        - $ref: '#/components/schemas/PersonalInfo'
+        - $ref: '#/components/schemas/Address'
+        - $ref: '#/components/schemas/Preference'
+    UserProfile:
+      allOf:
+        - $ref: '#/components/schemas/CreateUserProfile'
+      type: object
+      properties:
+        identifier:
+          type: string
