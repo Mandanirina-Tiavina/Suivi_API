@@ -1,0 +1,18 @@
+openapi: 3.0.3
+info:
+  title: exo 3 openapi
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8000'
+paths:
+  /task:
+    get:
+      responses:
+        200:
+          description: Task's List
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
